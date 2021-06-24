@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreNFC
 import AVFoundation
 
 struct Hole {
@@ -13,9 +14,21 @@ struct Hole {
     let number: Int
 }
 
-class MapViewController: UIViewController {
-    @IBOutlet weak var mapView: UIImageView!
+struct Stats : Decodable {
+    var name: String
+    var score: Int
+    var hole: Int
+}
 
+struct Score : Decodable {
+    var score: Int
+}
+
+class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
+    @IBOutlet weak var mapView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var scoreLabel: UILabel!
+    
     private let circleRadius: CGFloat = 14
     private var holes: [Hole] = []
     private var buttons: [Int: UIButton] = [:]
@@ -31,8 +44,8 @@ class MapViewController: UIViewController {
             Hole(location: CGPoint(x: 349, y: 628), number: 4),
             Hole(location: CGPoint(x: 280, y: 719), number: 5),
             Hole(location: CGPoint(x: 143, y: 757), number: 6),
-            Hole(location: CGPoint(x: 0, y: 0), number: 7),
-            Hole(location: CGPoint(x: 0, y: 0), number: 8),
+            Hole(location: CGPoint(x: 250, y: 468), number: 7),
+            Hole(location: CGPoint(x: 226, y: 363), number: 8),
             Hole(location: CGPoint(x: 309, y: 322), number: 9),
         ]
 
@@ -68,9 +81,92 @@ class MapViewController: UIViewController {
         }
     }
 
+
+    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+        print("session invalidate \(error)")
+    }
+
+    
+    override func viewWillAppear(_ animated: Bool) {
+        nameLabel.text = UserDefaults.standard.string(forKey: "player")
+        refreshScore()
+    }
+    
+    func refreshScore() {
+        guard let player = UserDefaults.standard.string(forKey: "player") else { return }
+        getScore(player: player) { score in
+            if let score = score {
+                self.scoreLabel.text = "\(score)"
+            }
+        }
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+        print("detected NDEF \(messages)")
+        for m in messages {
+            for r in m.records {
+                if let str = r.wellKnownTypeTextPayload().0 {
+                    if let score = Int(str) {
+                        setScore(score: score)
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
+    func getScore(player: String, callback: @escaping (Int?) -> Void) {
+        let url = URL(string: "https://discobackend.azurewebsites.net/Disco/getscores?name=\(player)")!
+        let t = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, urlResponse, err in
+            if let data = data {
+                
+                if let score = String(data: data, encoding: .utf8) {
+                    DispatchQueue.main.async {
+                        callback(Int(score))
+                    }
+                }
+            }
+        }
+        t.resume()
+    }
+
+    
+    func setScore(score: Int) {
+        let hole = UserDefaults.standard.integer(forKey: "hole")
+        if let player = UserDefaults.standard.string(forKey: "player") {
+            if let url = URL(string: "https://discobackend.azurewebsites.net/Disco/setscoredb?player=\(player)&hole=\(hole)&score=\(score)") {
+                let t = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, urlResponse, err in
+                    
+                    if let data = data {
+                        let response = try? JSONDecoder().decode(Stats.self, from: data)
+                        print(response ?? "")
+                    }
+                    self.refreshScore()
+                }
+                t.resume()
+            }
+        }
+    }
+
     @IBAction func holeTapped(_ sender: Any) {
         guard let button = sender as? UIButton else { return }
         print("Hej \(button.tag)")
+        UserDefaults.standard.setValue(button.tag, forKey: "hole")
+        
+        guard NFCNDEFReaderSession.readingAvailable else {
+            let alertController = UIAlertController(
+                title: "Scanning Not Supported",
+                message: "This device doesn't support tag scanning.",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+
+        let session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        session.alertMessage = "Slag på hål \(button.tag)"
+        session.begin()
     }
 
 }

@@ -27,7 +27,7 @@
         <!--View Controller-->
         <scene sceneID="RRa-bd-nma">
             <objects>
-                <viewController id="Hh4-4e-ZvE" sceneMemberID="viewController">
+                <viewController id="Hh4-4e-ZvE" customClass="ViewController" customModule="Disco" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="H5l-ZC-K06">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -37,13 +37,16 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Sätt igång!"/>
                                 <connections>
-                                    <segue destination="DSn-yn-ZTT" kind="show" id="ADb-Df-6pu"/>
+                                    <segue destination="DSn-yn-ZTT" kind="show" identifier="startPlaying" id="ADb-Df-6pu"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Spelare" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qst-SB-Dqe">
                                 <rect key="frame" x="20" y="455.5" width="374" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="Hh4-4e-ZvE" id="pV8-lp-UlH"/>
+                                </connections>
                             </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZjW-ED-PSJ"/>
@@ -59,6 +62,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Tex-Zh-lc5"/>
+                    <connections>
+                        <outlet property="spelare" destination="qst-SB-Dqe" id="7YL-BW-Y1R"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OdB-dn-TiE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -101,124 +107,37 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="icL-P7-PKa">
-                                <rect key="frame" x="0.0" y="760" width="414" height="16"/>
-                                <subviews>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qO3-1K-d7V">
-                                        <rect key="frame" x="0.0" y="0.0" width="46" height="16"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="1"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="Wmp-I8-MP1"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="jlq-ec-Xgr">
-                                        <rect key="frame" x="46" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="2"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="Aap-Z4-r0k"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="NSb-Mg-K2J">
-                                        <rect key="frame" x="92" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="3"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="X3M-dC-22C"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="uJC-re-sZO">
-                                        <rect key="frame" x="138" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="4"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="sA8-mm-6GH"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="VXx-J1-vaA">
-                                        <rect key="frame" x="184" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="5"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="xYL-2m-txr"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="evI-Sa-dcJ">
-                                        <rect key="frame" x="230" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="6"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="SET-IM-qvI"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Bcl-h7-4qJ">
-                                        <rect key="frame" x="276" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="7"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="bhL-M8-rXb"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="PKm-OG-5LI">
-                                        <rect key="frame" x="322" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="8"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="aKm-Is-ppy"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="VYM-Jn-mPo">
-                                        <rect key="frame" x="368" y="0.0" width="46" height="16"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="9"/>
-                                        <connections>
-                                            <action selector="holeTapped:" destination="DSn-yn-ZTT" eventType="touchUpInside" id="nWb-NU-U8u"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="C5o-Il-r3E"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="icL-P7-PKa" firstAttribute="top" secondItem="PLE-DA-TsK" secondAttribute="bottom" id="4QE-E2-ERZ"/>
-                            <constraint firstItem="icL-P7-PKa" firstAttribute="leading" secondItem="C5o-Il-r3E" secondAttribute="leading" id="E1R-9N-Qo5"/>
                             <constraint firstItem="ADH-r6-Z84" firstAttribute="leading" secondItem="C5o-Il-r3E" secondAttribute="leading" constant="20" id="Fk6-kG-zDc"/>
                             <constraint firstItem="PLE-DA-TsK" firstAttribute="leading" secondItem="C5o-Il-r3E" secondAttribute="leading" id="M1E-tt-gJo"/>
                             <constraint firstItem="C5o-Il-r3E" firstAttribute="trailing" secondItem="y44-Fd-378" secondAttribute="trailing" constant="20" id="NMY-bV-nbN"/>
                             <constraint firstItem="ADH-r6-Z84" firstAttribute="top" secondItem="PLE-DA-TsK" secondAttribute="bottom" constant="16" id="RFn-Ot-PzN"/>
                             <constraint firstItem="C5o-Il-r3E" firstAttribute="bottom" secondItem="y44-Fd-378" secondAttribute="bottom" id="UN2-kG-6op"/>
                             <constraint firstItem="C5o-Il-r3E" firstAttribute="trailing" secondItem="ADH-r6-Z84" secondAttribute="trailing" constant="20" id="aof-pf-MP0"/>
-                            <constraint firstItem="C5o-Il-r3E" firstAttribute="trailing" secondItem="icL-P7-PKa" secondAttribute="trailing" id="ay4-dF-4pA"/>
                             <constraint firstItem="y44-Fd-378" firstAttribute="top" secondItem="ADH-r6-Z84" secondAttribute="bottom" constant="16" id="j4r-7C-jah"/>
                             <constraint firstItem="PLE-DA-TsK" firstAttribute="top" secondItem="C5o-Il-r3E" secondAttribute="top" id="maA-OB-9io"/>
                             <constraint firstItem="y44-Fd-378" firstAttribute="leading" secondItem="C5o-Il-r3E" secondAttribute="leading" constant="20" id="uIV-bT-Cq2"/>
                             <constraint firstItem="PLE-DA-TsK" firstAttribute="trailing" secondItem="C5o-Il-r3E" secondAttribute="trailing" id="zGg-fu-Smu"/>
-                            <constraint firstItem="ADH-r6-Z84" firstAttribute="top" secondItem="icL-P7-PKa" secondAttribute="bottom" id="zmk-dc-nRL"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="uLb-qF-qAN"/>
                     <connections>
                         <outlet property="mapView" destination="PLE-DA-TsK" id="HeO-6j-BIh"/>
+                        <outlet property="nameLabel" destination="a9y-Pc-f7e" id="fhQ-sA-BKx"/>
+                        <outlet property="scoreLabel" destination="r6D-LV-3GD" id="7zI-zr-8jE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JlK-hm-d0c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1324.6376811594205" y="178.79464285714286"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Scoreboard View Controller-->
         <scene sceneID="Xsf-Jr-MEF">
             <objects>
-                <tableViewController id="tGO-WC-Zu5" sceneMemberID="viewController">
+                <tableViewController id="tGO-WC-Zu5" customClass="ScoreboardViewController" customModule="Disco" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Bb6-wd-i9H">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
