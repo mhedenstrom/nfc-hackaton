@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 
 namespace Disco.Dal
@@ -13,7 +14,9 @@ namespace Disco.Dal
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            var dataSource = "Data Source=disco.db";
+            var root = AppContext.BaseDirectory;
+            var dbPath = Path.Combine(root, "disco.db");
+            var dataSource = $"Data Source={dbPath}";
             options.UseSqlite(dataSource);
         }
     }
