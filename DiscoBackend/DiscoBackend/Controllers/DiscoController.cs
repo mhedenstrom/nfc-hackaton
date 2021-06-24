@@ -20,8 +20,11 @@ namespace DiscoBackend.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Player> Get()
+        //public IEnumerable<Player> Get()
+        public List<Summary> GetAll()
         {
+            return MemCache.GetAll();
+            /*
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new Player
                 {
@@ -29,13 +32,15 @@ namespace DiscoBackend.Controllers
                     Hole = rng.Next(20),
                     Score = rng.Next(9)
                 })
-                .ToArray();
+                .ToArray();*/
         }
 
         [Route("setscore")]
         [HttpGet]
         public async Task<OkResult> SetScores(string player, int hole, int score)
         {
+            MemCache.AddOrUpdateScore(player, new HoleScore{ Hole = hole, Score = score});
+            /*
             using (var db = new PlayerContext())
             {
                 var item = db.Players.FirstOrDefault(x => x.Name.Equals(player) && x.Hole == hole);
@@ -51,7 +56,7 @@ namespace DiscoBackend.Controllers
                 }
                 await db.SaveChangesAsync();
             }
-
+            */
             return Ok();
         }
 
@@ -59,13 +64,17 @@ namespace DiscoBackend.Controllers
         [Route("clear")]
         public async Task<OkResult> Clear()
         {
+            MemCache.Clear();
+            /*
+            string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}discof.db";
+            _logger.LogError("DBPATH: " + databasePath);
             using (var db = new PlayerContext())
             {
                 var all = from c in db.Players select c;
                 db.Players.RemoveRange(all);
                 await db.SaveChangesAsync();
             }
-
+            */
             return Ok();
         }
     }
