@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Disco.Dal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 
 namespace DiscoBackend.Controllers
@@ -96,6 +98,37 @@ namespace DiscoBackend.Controllers
                 return db.Players.Where(x => x.Name.Equals(name)).Sum(x => x.Score);
             }
         }
+        [HttpGet]
+        [Route("clearmyscore")]
+        public async Task ClearMyScore(string name)
+        {
+            using (var db = new PlayerContext())
+            {
+                var all = from c in db.Players where c.Name.Equals(name) select c;
+                db.Players.RemoveRange(all);
+                await db.SaveChangesAsync();
+            }
+        }
+        [HttpGet]
+        [Route("getmyscores")]
+        public List<Summary> GetMyScores(string name)
+        {
+            var res = new List<Summary>();
+            using (var db = new PlayerContext())
+            {
+                var dbResult = db.Players.Where(x => x.Name.Equals(name)).OrderBy(x => x.Hole);
+                foreach (var item in dbResult)
+                {
+                    res.Add(new Summary
+                    {
+                        Player = name,
+                        Hole = item.Hole,
+                        Score = item.Score
+                    });
+                }
 
+                return res;
+            }
+        }
     }
 }
