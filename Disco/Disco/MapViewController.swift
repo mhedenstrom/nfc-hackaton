@@ -108,6 +108,8 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 if let str = r.wellKnownTypeTextPayload().0 {
                     if let score = Int(str) {
                         setScore(score: score)
+                        session.alertMessage = "Du fick \(score) kast"
+                        session.invalidate()
                         return
                     }
                 }
