@@ -11,13 +11,33 @@ import UIKit
 class ScoreboardViewController: UITableViewController {
     var board: [Stats] = []
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Rensa", style: .plain, target: self, action: #selector(clearMyScore))
+    }
+    
+    @objc func clearMyScore() {
+        guard let name = UserDefaults.standard.string(forKey: "player") else { return }
+        let url = URL(string: "https://discobackend.azurewebsites.net/Disco/clearmyscore?name=\(name)")!
+        let t = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, urlResponse, err in
+            self.refreshScores()
+        }
+        t.resume()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshScores()
+    }
+
+    func refreshScores() {
         getScoreBoard() { scores in
             self.board = scores ?? []
             self.tableView.reloadData()
         }
-    }
 
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return board.count
     }
