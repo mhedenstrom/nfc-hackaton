@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Disco.Dal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -29,6 +30,43 @@ namespace DiscoBackend.Controllers
                     Score = rng.Next(9)
                 })
                 .ToArray();
+        }
+
+        [Route("setscore")]
+        [HttpGet]
+        public async Task<OkResult> SetScores(string player, int hole, int score)
+        {
+            using (var db = new PlayerContext())
+            {
+                var item = db.Players.FirstOrDefault(x => x.Name.Equals(player) && x.Hole == hole);
+                if (item != null)
+                {
+                    item.Score = score;
+                    db.Update(item);
+                }
+                else
+                {
+                    var row = new Player { Id = Guid.NewGuid(), Name = player, Hole = hole, Score = score };
+                    await db.Players.AddAsync(row);
+                }
+                await db.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("clear")]
+        public async Task<OkResult> Clear()
+        {
+            using (var db = new PlayerContext())
+            {
+                var all = from c in db.Players select c;
+                db.Players.RemoveRange(all);
+                await db.SaveChangesAsync();
+            }
+
+            return Ok();
         }
     }
 }
