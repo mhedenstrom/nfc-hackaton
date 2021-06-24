@@ -87,5 +87,15 @@ namespace DiscoBackend.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("getscores")]
+        public int GetScores(string name)
+        {
+            using (var db = new PlayerContext())
+            {
+                return db.Players.Where(x => x.Name.Equals(name)).Sum(x => x.Score);
+            }
+        }
+
     }
 }
