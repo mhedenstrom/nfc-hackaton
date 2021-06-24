@@ -14,24 +14,7 @@ namespace Disco.Dal
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            //var root = AppContext.BaseDirectory;
-            //var dbPath = Path.Combine(root, "disco.db");
-            //var dataSource = $"Data Source={dbPath}";
-
-            //Console.WriteLine("--DBPATH: " + dataSource);
-            //options.UseSqlite(dataSource);
-
-#if DEBUG
-            var databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}discof.db";
-            Console.WriteLine("--DBPATH: " + databasePath);
-            options.UseSqlite($"Data Source={databasePath}");
-#else
-            var databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}discof.db";
-            Console.WriteLine("--DBPATH: " + databasePath);
-            options.UseSqlite($"Data Source={databasePath}");
-            //var dbPath = @"c:\home\site\wwwroot\discof.db";
-            //options.UseSqlite($"Data Source={databasePath}");
-#endif
+            options.UseSqlite($"Data Source=discof.db");
         }
     }
     public class Player

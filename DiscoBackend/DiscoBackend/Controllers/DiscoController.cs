@@ -13,6 +13,7 @@ namespace DiscoBackend.Controllers
     public class DiscoController : ControllerBase
     {
         private readonly ILogger<DiscoController> _logger;
+        private const bool UseMemcache = true;
 
         public DiscoController(ILogger<DiscoController> logger)
         {
@@ -20,19 +21,9 @@ namespace DiscoBackend.Controllers
         }
 
         [HttpGet]
-        //public IEnumerable<Player> Get()
         public List<Summary> GetAll()
         {
             return MemCache.GetAll();
-            /*
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Player
-                {
-                    Name = "Player name",
-                    Hole = rng.Next(20),
-                    Score = rng.Next(9)
-                })
-                .ToArray();*/
         }
 
         [Route("setscore")]
@@ -40,7 +31,44 @@ namespace DiscoBackend.Controllers
         public async Task<OkResult> SetScores(string player, int hole, int score)
         {
             MemCache.AddOrUpdateScore(player, new HoleScore{ Hole = hole, Score = score});
-            /*
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("clear")]
+        public async Task<OkResult> Clear()
+        {
+            MemCache.Clear();
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("cleardb")]
+        public async Task<OkResult> ClearDb()
+        {
+            using (var db = new PlayerContext())
+            {
+                var all = from c in db.Players select c;
+                db.Players.RemoveRange(all);
+                await db.SaveChangesAsync();
+            }
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("getalldb")]
+        public IEnumerable<Player> GetAllLPlayers()
+        {
+            using (var db = new PlayerContext())
+            {
+                return db.Players.ToList();
+            }
+
+        }
+        [Route("setscoredb")]
+        [HttpGet]
+        public async Task<OkResult> SetScoreDb(string player, int hole, int score)
+        {
             using (var db = new PlayerContext())
             {
                 var item = db.Players.FirstOrDefault(x => x.Name.Equals(player) && x.Hole == hole);
@@ -56,26 +84,8 @@ namespace DiscoBackend.Controllers
                 }
                 await db.SaveChangesAsync();
             }
-            */
             return Ok();
         }
 
-        [HttpGet]
-        [Route("clear")]
-        public async Task<OkResult> Clear()
-        {
-            MemCache.Clear();
-            /*
-            string databasePath = $"{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}discof.db";
-            _logger.LogError("DBPATH: " + databasePath);
-            using (var db = new PlayerContext())
-            {
-                var all = from c in db.Players select c;
-                db.Players.RemoveRange(all);
-                await db.SaveChangesAsync();
-            }
-            */
-            return Ok();
-        }
     }
 }
