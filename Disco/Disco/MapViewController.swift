@@ -23,6 +23,7 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     
     private let circleRadius: CGFloat = 14
     private var courseType = CourseType.holes9
+    private var lastCourseType = CourseType.holes9
     private var buttonsLoaded = false
     private var buttons: [Int: UIButton] = [:]
 
@@ -91,8 +92,21 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
             courseType = .holes18
         case .holes18:
             courseType = .holes9
+        case .info:
+            courseType = lastCourseType
+        }
+        lastCourseType = courseType
+        updateMap(with: courseType)
+    }
+
+    @IBAction func infoTapped(_ sender: Any) {
+        if courseType == .info {
+            courseType = lastCourseType
+        } else {
+            courseType = .info
         }
         updateMap(with: courseType)
+
     }
 
 

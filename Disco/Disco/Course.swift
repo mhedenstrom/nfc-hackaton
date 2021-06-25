@@ -10,13 +10,17 @@ struct Hole {
 enum CourseType {
     case holes9
     case holes18
+    case info
     var image: UIImage? {
         switch self {
         case .holes9:
             return UIImage(named: "Map")
         case .holes18:
             return UIImage(named: "Skataas18")
+        case .info:
+            return UIImage(named: "SkataasInfo")
         }
+
     }
     var holes: [Hole] {
         switch self {
@@ -24,13 +28,15 @@ enum CourseType {
             return Course.holes9
         case .holes18:
             return Course.holes18
+        case .info:
+            return []
         }
     }
     var backgroundColour: UIColor {
         switch self {
         case .holes9:
             return UIColor(red: 134/255, green: 192/255, blue: 159/255, alpha: 1.0)
-        case .holes18:
+        case .holes18, .info:
             return UIColor(red: 64/255, green: 132/255, blue: 90/255, alpha: 1.0)
         }
     }
