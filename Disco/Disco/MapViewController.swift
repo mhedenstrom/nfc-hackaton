@@ -15,8 +15,9 @@ struct Score : Decodable {
 }
 
 
-class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
+class MapViewController: UIViewController, UIScrollViewDelegate, NFCNDEFReaderSessionDelegate {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var mapView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -60,6 +61,13 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
                 height: circleRadius * 2
             )
         }
+    }
+
+
+    // MARK: - Zoooooom
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return mapView
     }
 
 
@@ -184,6 +192,7 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     private func updateMap(with type: CourseType) {
         mapView.image = courseType.image
         mapView.backgroundColor = courseType.backgroundColour
+        scrollView.backgroundColor = courseType.backgroundColour
         drawButtons(for: type)
     }
 
