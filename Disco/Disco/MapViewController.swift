@@ -1,18 +1,8 @@
-//
-//  MapViewController.swift
-//  Disco
-//
-//  Created by Richard Hult on 2021-06-24.
-//
 
 import UIKit
 import CoreNFC
 import AVFoundation
 
-struct Hole {
-    let location: CGPoint
-    let number: Int
-}
 
 struct Stats : Decodable {
     var name: String
@@ -24,52 +14,44 @@ struct Score : Decodable {
     var score: Int
 }
 
-class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
+
+class MapViewController: UIViewController, UIScrollViewDelegate, NFCNDEFReaderSessionDelegate {
+
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var mapView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
     
     private let circleRadius: CGFloat = 14
-    private var holes: [Hole] = []
+    private var courseType = CourseType.holes9
+    private var lastCourseType = CourseType.holes9
+    private var buttonsLoaded = false
     private var buttons: [Int: UIButton] = [:]
+
+
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Original unscaled coordinates here.
-        holes = [
-            Hole(location: CGPoint(x: 346, y: 79), number: 1),
-            Hole(location: CGPoint(x: 438, y: 45), number: 2),
-            Hole(location: CGPoint(x: 374, y: 265), number: 3),
-            Hole(location: CGPoint(x: 349, y: 628), number: 4),
-            Hole(location: CGPoint(x: 280, y: 719), number: 5),
-            Hole(location: CGPoint(x: 143, y: 757), number: 6),
-            Hole(location: CGPoint(x: 250, y: 468), number: 7),
-            Hole(location: CGPoint(x: 226, y: 363), number: 8),
-            Hole(location: CGPoint(x: 309, y: 322), number: 9),
-        ]
-
-        for hole in holes {
-            let button = UIButton(type: .custom)
-            button.backgroundColor = .blue
-            button.layer.borderColor = UIColor.white.cgColor
-            button.layer.borderWidth = 3
-            button.layer.cornerRadius = circleRadius
-            button.setTitle("\(hole.number)", for: .normal)
-            buttons[hole.number] = button
-            button.tag = hole.number
-            button.addTarget(self, action: #selector(holeTapped(_:)), for: .touchUpInside)
-            mapView.addSubview(button)
-        }
         mapView.isUserInteractionEnabled = true
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        nameLabel.text = UserDefaults.standard.string(forKey: "player")
+        refreshScore()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        updateMap(with: courseType)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        if buttonsLoaded == false { return }
 
         let imageRect = CGRect(origin: .zero, size: mapView.image!.size)
-        let scaledRect = imageRect.aspectFill(viewRect: mapView.bounds)
-        for hole in holes {
+        let scaledRect = imageRect.aspect(viewRect: mapView.bounds, mode: .scaleAspectFit)
+        for hole in courseType.holes {
             let button = buttons[hole.number]!
 
             button.frame = CGRect(
@@ -82,25 +64,66 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
     }
 
 
+    // MARK: - Zoooooom
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return mapView
+    }
+
+
+    // MARK: - Actions
+
+    @IBAction func holeTapped(_ sender: Any) {
+        guard let button = sender as? UIButton else { return }
+        print("Hej \(button.tag)")
+        UserDefaults.standard.setValue(button.tag, forKey: "hole")
+
+        guard NFCNDEFReaderSession.readingAvailable else {
+            let alertController = UIAlertController(
+                title: "Scanning Not Supported",
+                message: "This device doesn't support tag scanning.",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+
+        let session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        session.alertMessage = "Slag på hål \(button.tag)"
+        session.begin()
+    }
+
+    @IBAction func switchTapped(_ sender: Any) {
+        switch courseType {
+        case .holes9:
+            courseType = .holes18
+        case .holes18:
+            courseType = .holes9
+        case .info:
+            courseType = lastCourseType
+        }
+        lastCourseType = courseType
+        updateMap(with: courseType)
+    }
+
+    @IBAction func infoTapped(_ sender: Any) {
+        if courseType == .info {
+            courseType = lastCourseType
+        } else {
+            courseType = .info
+        }
+        updateMap(with: courseType)
+
+    }
+
+
+    // MARK: - NFC
+
     func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
         print("session invalidate \(error)")
     }
 
-    
-    override func viewWillAppear(_ animated: Bool) {
-        nameLabel.text = UserDefaults.standard.string(forKey: "player")
-        refreshScore()
-    }
-    
-    func refreshScore() {
-        guard let player = UserDefaults.standard.string(forKey: "player") else { return }
-        getScore(player: player) { score in
-            if let score = score {
-                self.scoreLabel.text = "\(score)"
-            }
-        }
-    }
-    
     func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
         print("detected NDEF \(messages)")
         for m in messages {
@@ -116,6 +139,19 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
             }
         }
     }
+
+
+    // MARK: - Update Score
+
+    func refreshScore() {
+        guard let player = UserDefaults.standard.string(forKey: "player") else { return }
+        getScore(player: player) { score in
+            if let score = score {
+                self.scoreLabel.text = "\(score)"
+            }
+        }
+    }
+
     
     func getScore(player: String, callback: @escaping (Int?) -> Void) {
         let url = URL(string: "https://discobackend.azurewebsites.net/Disco/getscores?name=\(player)")!
@@ -150,42 +186,34 @@ class MapViewController: UIViewController, NFCNDEFReaderSessionDelegate {
         }
     }
 
-    @IBAction func holeTapped(_ sender: Any) {
-        guard let button = sender as? UIButton else { return }
-        print("Hej \(button.tag)")
-        UserDefaults.standard.setValue(button.tag, forKey: "hole")
-        
-        guard NFCNDEFReaderSession.readingAvailable else {
-            let alertController = UIAlertController(
-                title: "Scanning Not Supported",
-                message: "This device doesn't support tag scanning.",
-                preferredStyle: .alert
-            )
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-            return
+
+    // MARK: - Update Map
+
+    private func updateMap(with type: CourseType) {
+        mapView.image = courseType.image
+        mapView.backgroundColor = courseType.backgroundColour
+        scrollView.backgroundColor = courseType.backgroundColour
+        drawButtons(for: type)
+    }
+
+    private func drawButtons(for type: CourseType) {
+        _ = mapView.subviews.map { $0.removeFromSuperview() }
+        for hole in type.holes {
+            let button = UIButton(type: .custom)
+            button.backgroundColor = .blue
+            button.layer.borderColor = UIColor.white.cgColor
+            button.layer.borderWidth = 3
+            button.layer.cornerRadius = circleRadius
+            button.setTitle("\(hole.number)", for: .normal)
+            buttons[hole.number] = button
+            button.tag = hole.number
+            button.addTarget(self, action: #selector(holeTapped(_:)), for: .touchUpInside)
+            mapView.addSubview(button)
         }
-
-        let session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
-        session.alertMessage = "Slag på hål \(button.tag)"
-        session.begin()
+        buttonsLoaded = true
+        view.setNeedsLayout()
     }
 
 }
 
-extension CGRect {
-    func aspectFill(viewRect: CGRect) -> CGRect {
-        var scaledImageRect: CGRect = .zero
 
-        let aspectWidth = viewRect.width / self.size.width
-        let aspectHeight = viewRect.height / self.size.height
-        let aspectRatio = max(aspectWidth, aspectHeight) // Note: Use min for aspect fit.
-
-        scaledImageRect.size.width = self.width * aspectRatio
-        scaledImageRect.size.height = self.height * aspectRatio
-        scaledImageRect.origin.x = (viewRect.width - scaledImageRect.width) / 2.0
-        scaledImageRect.origin.y = (viewRect.height - scaledImageRect.height) / 2.0
-
-        return scaledImageRect
-    }
-}

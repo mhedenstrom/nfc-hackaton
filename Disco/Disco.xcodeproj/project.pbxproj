@@ -15,6 +15,8 @@
 		158A4A722684763200D8C13B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 158A4A702684763200D8C13B /* LaunchScreen.storyboard */; };
 		158A4A7A26847EC000D8C13B /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158A4A7926847EC000D8C13B /* MapViewController.swift */; };
 		2C1282A02684AFDA004E87AA /* ScoreboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C12829F2684AFDA004E87AA /* ScoreboardViewController.swift */; };
+		DE4F79C726866F5400AF0C7B /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4F79C626866F5400AF0C7B /* Course.swift */; };
+		DE4F79C926866FAB00AF0C7B /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4F79C826866FAB00AF0C7B /* CGRect+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		158A4A7926847EC000D8C13B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2C12829F2684AFDA004E87AA /* ScoreboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
 		2C42A7FE2684836F00561026 /* DiscoDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DiscoDebug.entitlements; sourceTree = "<group>"; };
+		DE4F79C626866F5400AF0C7B /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		DE4F79C826866FAB00AF0C7B /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,8 @@
 				158A4A692684763100D8C13B /* ViewController.swift */,
 				158A4A6B2684763100D8C13B /* Main.storyboard */,
 				158A4A7926847EC000D8C13B /* MapViewController.swift */,
+				DE4F79C626866F5400AF0C7B /* Course.swift */,
+				DE4F79C826866FAB00AF0C7B /* CGRect+Extensions.swift */,
 				158A4A6E2684763200D8C13B /* Assets.xcassets */,
 				158A4A702684763200D8C13B /* LaunchScreen.storyboard */,
 				158A4A732684763200D8C13B /* Info.plist */,
@@ -145,9 +151,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE4F79C726866F5400AF0C7B /* Course.swift in Sources */,
 				158A4A6A2684763100D8C13B /* ViewController.swift in Sources */,
 				158A4A662684763100D8C13B /* AppDelegate.swift in Sources */,
 				158A4A682684763100D8C13B /* SceneDelegate.swift in Sources */,
+				DE4F79C926866FAB00AF0C7B /* CGRect+Extensions.swift in Sources */,
 				158A4A7A26847EC000D8C13B /* MapViewController.swift in Sources */,
 				2C1282A02684AFDA004E87AA /* ScoreboardViewController.swift in Sources */,
 			);
