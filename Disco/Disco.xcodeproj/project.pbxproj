@@ -30,6 +30,7 @@
 		158A4A732684763200D8C13B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		158A4A7926847EC000D8C13B /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		2C12829F2684AFDA004E87AA /* ScoreboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreboardViewController.swift; sourceTree = "<group>"; };
+		2C3215D1268A44B7008DB91B /* DiscoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DiscoRelease.entitlements; sourceTree = "<group>"; };
 		2C42A7FE2684836F00561026 /* DiscoDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DiscoDebug.entitlements; sourceTree = "<group>"; };
 		DE4F79C626866F5400AF0C7B /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		DE4F79C826866FAB00AF0C7B /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
@@ -65,6 +66,7 @@
 		158A4A642684763100D8C13B /* Disco */ = {
 			isa = PBXGroup;
 			children = (
+				2C3215D1268A44B7008DB91B /* DiscoRelease.entitlements */,
 				2C42A7FE2684836F00561026 /* DiscoDebug.entitlements */,
 				158A4A652684763100D8C13B /* AppDelegate.swift */,
 				158A4A672684763100D8C13B /* SceneDelegate.swift */,
@@ -324,6 +326,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Disco/DiscoRelease.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PRJSXETJJ7;
 				INFOPLIST_FILE = Disco/Info.plist;
