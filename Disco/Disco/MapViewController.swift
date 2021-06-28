@@ -152,7 +152,6 @@ class MapViewController: UIViewController, UIScrollViewDelegate, NFCNDEFReaderSe
         }
     }
 
-    
     func getScore(player: String, callback: @escaping (Int?) -> Void) {
         let url = URL(string: "https://discobackend.azurewebsites.net/Disco/getscores?name=\(player)")!
         let t = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, urlResponse, err in
@@ -167,7 +166,6 @@ class MapViewController: UIViewController, UIScrollViewDelegate, NFCNDEFReaderSe
         }
         t.resume()
     }
-
     
     func setScore(score: Int) {
         let hole = UserDefaults.standard.integer(forKey: "hole")
@@ -193,10 +191,10 @@ class MapViewController: UIViewController, UIScrollViewDelegate, NFCNDEFReaderSe
         mapView.image = courseType.image
         mapView.backgroundColor = courseType.backgroundColour
         scrollView.backgroundColor = courseType.backgroundColour
-        drawButtons(for: type)
+        placeHoles(for: type)
     }
 
-    private func drawButtons(for type: CourseType) {
+    private func placeHoles(for type: CourseType) {
         _ = mapView.subviews.map { $0.removeFromSuperview() }
         for hole in type.holes {
             let button = UIButton(type: .custom)
