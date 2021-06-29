@@ -20,7 +20,6 @@ enum CourseType {
         case .info:
             return UIImage(named: "SkataasInfo")
         }
-
     }
     var holes: [Hole] {
         switch self {

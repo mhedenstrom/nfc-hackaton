@@ -9,13 +9,31 @@ import Foundation
 import UIKit
 
 class ScoreboardViewController: UITableViewController {
+
     var board: [Stats] = []
-    
+
+
+    // MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Rensa", style: .plain, target: self, action: #selector(clearMyScore))
+        tableView.tableFooterView = UIView()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Rensa",
+            style: .plain,
+            target: self,
+            action: #selector(clearMyScore)
+        )
     }
-    
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshScores()
+    }
+
+
+    // MARK: - Action
+
     @objc func clearMyScore() {
         guard let name = UserDefaults.standard.string(forKey: "player") else { return }
         let url = URL(string: "https://discobackend.azurewebsites.net/Disco/clearmyscore?name=\(name)")!
@@ -24,20 +42,14 @@ class ScoreboardViewController: UITableViewController {
         }
         t.resume()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+
+    @IBAction func refreshAction(_ sender: Any) {
         refreshScores()
     }
 
-    func refreshScores() {
-        getScoreBoard() { scores in
-            self.board = scores ?? []
-            self.tableView.reloadData()
-        }
 
-    }
-    
+    // MARK: - UITableViewController
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return board.count
     }
@@ -49,6 +61,18 @@ class ScoreboardViewController: UITableViewController {
         cell.detailTextLabel?.text = "\(player.score)"
         return cell
     }
+
+
+    // MARK: - Update Score
+
+    func refreshScores() {
+        tableView.refreshControl?.beginRefreshing()
+        getScoreBoard() { scores in
+            self.board = scores ?? []
+            self.tableView.refreshControl?.endRefreshing()
+            self.tableView.reloadData()
+        }
+    }
     
     func getScoreBoard(callback: @escaping ([Stats]?) -> Void) {
         let url = URL(string: "https://discobackend.azurewebsites.net/Disco/getalldb")!
@@ -58,14 +82,14 @@ class ScoreboardViewController: UITableViewController {
                 print(response ?? "")
                 DispatchQueue.main.async {
                     if let response = response {
-                   
-                        
                         var scores = Dictionary<String, Int>()
                         for s in response {
                             scores[s.name, default: 0] += s.score
                         }
                                  
-                        let scoreboard = scores.map { Stats(name: $0.key, score: $0.value, hole:0) }.sorted { $0.score < $1.score }
+                        let scoreboard = scores
+                            .map { Stats(name: $0.key, score: $0.value, hole:0) }
+                            .sorted { $0.score < $1.score }
                         callback(scoreboard)
                     }
                     

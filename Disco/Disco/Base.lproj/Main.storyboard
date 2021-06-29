@@ -24,7 +24,7 @@
             </objects>
             <point key="canvasLocation" x="-165" y="179"/>
         </scene>
-        <!--View Controller-->
+        <!--Disco-->
         <scene sceneID="RRa-bd-nma">
             <objects>
                 <viewController id="Hh4-4e-ZvE" customClass="ViewController" customModule="Disco" customModuleProvider="target" sceneMemberID="viewController">
@@ -33,35 +33,43 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LIr-MI-Ga1">
-                                <rect key="frame" x="20" y="851" width="388" height="41"/>
+                                <rect key="frame" x="20" y="831" width="388" height="41"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Sätt igång!"/>
                                 <connections>
                                     <segue destination="DSn-yn-ZTT" kind="show" identifier="startPlaying" id="ADb-Df-6pu"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Spelare" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qst-SB-Dqe">
-                                <rect key="frame" x="20" y="470.66666666666669" width="388" height="39"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Spelare" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qst-SB-Dqe">
+                                <rect key="frame" x="40" y="470.66666666666669" width="348" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="Hh4-4e-ZvE" id="pV8-lp-UlH"/>
                                 </connections>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Skriv in ditt namn:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1iw-AM-I4j">
+                                <rect key="frame" x="40" y="441.66666666666669" width="136.33333333333334" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZjW-ED-PSJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="qst-SB-Dqe" firstAttribute="top" secondItem="1iw-AM-I4j" secondAttribute="bottom" constant="8" id="AwZ-wQ-6IA"/>
                             <constraint firstItem="LIr-MI-Ga1" firstAttribute="leading" secondItem="ZjW-ED-PSJ" secondAttribute="leading" constant="20" id="E8Q-eu-ZvT"/>
                             <constraint firstItem="ZjW-ED-PSJ" firstAttribute="trailing" secondItem="LIr-MI-Ga1" secondAttribute="trailing" constant="20" id="HTW-h3-suA"/>
-                            <constraint firstItem="ZjW-ED-PSJ" firstAttribute="trailing" secondItem="qst-SB-Dqe" secondAttribute="trailing" constant="20" id="Iir-sv-amO"/>
-                            <constraint firstItem="qst-SB-Dqe" firstAttribute="leading" secondItem="ZjW-ED-PSJ" secondAttribute="leading" constant="20" id="MOb-oh-Ghy"/>
-                            <constraint firstItem="ZjW-ED-PSJ" firstAttribute="bottom" secondItem="LIr-MI-Ga1" secondAttribute="bottom" id="Qga-mm-bLJ"/>
+                            <constraint firstItem="ZjW-ED-PSJ" firstAttribute="trailing" secondItem="qst-SB-Dqe" secondAttribute="trailing" constant="40" id="Iir-sv-amO"/>
+                            <constraint firstItem="1iw-AM-I4j" firstAttribute="leading" secondItem="qst-SB-Dqe" secondAttribute="leading" id="M2P-aH-XSl"/>
+                            <constraint firstItem="qst-SB-Dqe" firstAttribute="leading" secondItem="ZjW-ED-PSJ" secondAttribute="leading" constant="40" id="MOb-oh-Ghy"/>
+                            <constraint firstItem="ZjW-ED-PSJ" firstAttribute="bottom" secondItem="LIr-MI-Ga1" secondAttribute="bottom" constant="20" id="Qga-mm-bLJ"/>
                             <constraint firstItem="qst-SB-Dqe" firstAttribute="centerY" secondItem="ZjW-ED-PSJ" secondAttribute="centerY" id="hfS-5E-gLR"/>
                             <constraint firstItem="qst-SB-Dqe" firstAttribute="centerX" secondItem="ZjW-ED-PSJ" secondAttribute="centerX" id="sZq-7T-ick"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Tex-Zh-lc5"/>
+                    <navigationItem key="navigationItem" title="Disco" id="Tex-Zh-lc5"/>
                     <connections>
                         <outlet property="spelare" destination="qst-SB-Dqe" id="7YL-BW-Y1R"/>
                     </connections>
@@ -70,7 +78,7 @@
             </objects>
             <point key="canvasLocation" x="587" y="179"/>
         </scene>
-        <!--Map View Controller-->
+        <!--Spel-->
         <scene sceneID="2yR-RP-Usv">
             <objects>
                 <viewController id="DSn-yn-ZTT" customClass="MapViewController" customModule="Disco" customModuleProvider="target" sceneMemberID="viewController">
@@ -156,7 +164,7 @@
                             <constraint firstItem="y44-Fd-378" firstAttribute="leading" secondItem="C5o-Il-r3E" secondAttribute="leading" constant="20" id="uIV-bT-Cq2"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="uLb-qF-qAN">
+                    <navigationItem key="navigationItem" title="Spel" id="uLb-qF-qAN">
                         <barButtonItem key="rightBarButtonItem" title="Switch" id="uPi-N1-pc8">
                             <connections>
                                 <action selector="switchTapped:" destination="DSn-yn-ZTT" id="Jfl-TO-U7A"/>
@@ -174,7 +182,7 @@
             </objects>
             <point key="canvasLocation" x="1324" y="178.56071964017991"/>
         </scene>
-        <!--Scoreboard View Controller-->
+        <!--Poängtavla-->
         <scene sceneID="Xsf-Jr-MEF">
             <objects>
                 <tableViewController id="tGO-WC-Zu5" customClass="ScoreboardViewController" customModule="Disco" customModuleProvider="target" sceneMemberID="viewController">
@@ -191,16 +199,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UEJ-nv-gpo">
-                                            <rect key="frame" x="20" y="15" width="25" height="14.333333333333334"/>
+                                            <rect key="frame" x="20" y="11.999999999999998" width="33" height="20.333333333333332"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9Lp-Qa-crV">
-                                            <rect key="frame" x="375.33333333333331" y="15" width="32.666666666666664" height="14.333333333333334"/>
+                                            <rect key="frame" x="364.33333333333331" y="11.999999999999998" width="43.666666666666664" height="20.333333333333332"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -213,7 +221,14 @@
                             <outlet property="delegate" destination="tGO-WC-Zu5" id="zWV-I9-ISL"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="6f3-96-4As"/>
+                    <navigationItem key="navigationItem" title="Poängtavla" id="6f3-96-4As"/>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="bK0-Ja-bxV">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <attributedString key="attributedTitle"/>
+                        <connections>
+                            <action selector="refreshAction:" destination="tGO-WC-Zu5" eventType="valueChanged" id="7ER-yU-iz4"/>
+                        </connections>
+                    </refreshControl>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XX3-MQ-hEV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
