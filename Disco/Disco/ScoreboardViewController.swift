@@ -38,7 +38,9 @@ class ScoreboardViewController: UITableViewController {
         guard let name = UserDefaults.standard.string(forKey: "player") else { return }
         let url = URL(string: "https://discobackend.azurewebsites.net/Disco/clearmyscore?name=\(name)")!
         let t = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, urlResponse, err in
-            self.refreshScores()
+            DispatchQueue.main.async {
+                self.refreshScores()
+            }
         }
         t.resume()
     }
